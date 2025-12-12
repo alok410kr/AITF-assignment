@@ -9,6 +9,9 @@ yarn-error.log*
 .env
 .env.*
 !/.env.example
+!DEPLOYMENT_CHECKLIST.md
+!DEPLOYMENT_GUIDE.md
+!RAILWAY_FIX.md
 backend/.env
 backend/.env.*
 !/backend/.env.example
