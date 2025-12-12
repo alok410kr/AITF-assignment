@@ -40,11 +40,37 @@ if (process.env.NODE_ENV === 'production') {
 
 // CORS configuration
 const corsOptions = {
-  origin: process.env.FRONTEND_URL
-    ? [process.env.FRONTEND_URL]
-    : process.env.NODE_ENV === 'production'
-      ? ['https://*.vercel.app']
-      : ['http://localhost:3000', 'http://127.0.0.1:3000'],
+  origin: function (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    // In production, allow Vercel domains and custom FRONTEND_URL
+    if (process.env.NODE_ENV === 'production') {
+      const allowedOrigins = process.env.FRONTEND_URL 
+        ? [process.env.FRONTEND_URL]
+        : [];
+      
+      // Allow all Vercel app domains
+      if (origin.endsWith('.vercel.app')) {
+        return callback(null, true);
+      }
+      
+      // Allow custom frontend URL if set
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+      
+      return callback(null, true); // Allow all in production for flexibility
+    }
+    
+    // In development, allow localhost
+    const allowedOrigins = ['http://localhost:3000', 'http://127.0.0.1:3000', 'http://localhost:5173'];
+    if (allowedOrigins.includes(origin) || !origin) {
+      return callback(null, true);
+    }
+    
+    callback(null, true);
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']

@@ -24,7 +24,7 @@ SkySense blends real-time weather with AI suggestions for outfits, activities, a
 
 - Frontend: React 18, TypeScript, Vite, Tailwind CSS, Framer Motion, Web Speech API
 - Backend: Node.js, Express, TypeScript, OpenWeatherMap, Google Gemini, Helmet, Compression, CORS
-- Hosting: Vercel (frontend), Render (backend)
+- Hosting: Vercel (frontend), Railway (backend)
 
 ## Prerequisites
 
@@ -80,39 +80,39 @@ Backend: http://localhost:3001
 
 ## Deployment
 
-### Quick Start
+### Complete Deployment Guide
 
-See `QUICK_DEPLOY.md` for a fast 10-minute deployment guide.
+**See [`DEPLOYMENT_GUIDE.md`](./DEPLOYMENT_GUIDE.md) for step-by-step instructions to deploy:**
+- Frontend on **Vercel**
+- Backend on **Railway**
 
-### Detailed Guide
+The guide includes:
+- Detailed setup instructions for both platforms
+- Environment variable configuration
+- CORS setup
+- Troubleshooting tips
+- Verification steps
 
-See `DEPLOYMENT.md` for complete step-by-step instructions.
+### Quick Reference
 
-### Frontend (Vercel)
-
-- Framework: Vite
-- Build: `npm run build`
-- Output: `dist`
-- Install: `npm install`
+**Frontend (Vercel):**
 - Root Directory: `frontend`
-- Env:
-  - `VITE_APP_API_URL=https://your-backend.onrender.com`
+- Build Command: `npm run build`
+- Output Directory: `dist`
+- Environment Variables:
+  - `VITE_APP_API_URL` - Your Railway backend URL
   - `VITE_APP_ENVIRONMENT=production`
 
-### Backend (Render/Railway)
-
-- Start: `npm start`
-- Build: `npm run build`
+**Backend (Railway):**
 - Root Directory: `backend`
-- Env:
-
-```env
-NODE_ENV=production
-OPENWEATHER_API_KEY=your_key_here
-GEMINI_API_KEY=your_key_here
-FRONTEND_URL=https://your-frontend.vercel.app
-PORT=3001
-```
+- Build Command: `npm run build`
+- Start Command: `npm start`
+- Environment Variables:
+  - `NODE_ENV=production`
+  - `OPENWEATHER_API_KEY` - Your OpenWeather API key
+  - `GEMINI_API_KEY` - Your Google Gemini API key
+  - `FRONTEND_URL` - Your Vercel frontend URL (set after frontend deployment)
+  - `PORT=3001` (optional, Railway auto-sets this)
 
 ### Health and checks
 
