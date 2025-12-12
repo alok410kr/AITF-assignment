@@ -126,6 +126,7 @@ Replace with your actual Vercel frontend URL.
 ### 4.1 Test Backend
 
 Visit your Railway backend health endpoint:
+
 ```
 https://your-railway-backend-url.up.railway.app/api/health
 ```
@@ -153,16 +154,19 @@ You should see a JSON response with service status.
 ### Backend Issues
 
 **Problem:** Backend health check shows "misconfigured"
+
 - **Solution:** Verify `OPENWEATHER_API_KEY` and `GEMINI_API_KEY` are set correctly in Railway
 
 **Problem:** CORS errors in browser console
-- **Solution:** 
+
+- **Solution:**
   1. Ensure `FRONTEND_URL` in Railway matches your exact Vercel URL (including `https://`)
   2. Wait for Railway to redeploy after adding the variable
   3. Clear browser cache and try again
 
 **Problem:** Backend not starting
-- **Solution:** 
+
+- **Solution:**
   1. Check Railway logs for errors
   2. Verify `PORT` is set (Railway auto-sets this, but you can set it manually)
   3. Ensure `npm run build` completes successfully
@@ -170,18 +174,21 @@ You should see a JSON response with service status.
 ### Frontend Issues
 
 **Problem:** Frontend shows "Failed to fetch" or network errors
+
 - **Solution:**
   1. Verify `VITE_APP_API_URL` in Vercel matches your Railway backend URL exactly
   2. Check that Railway backend is running (visit health endpoint)
   3. Ensure no trailing slash in the API URL
 
 **Problem:** Frontend builds but shows blank page
+
 - **Solution:**
   1. Check browser console for errors
   2. Verify `dist` folder is set as output directory in Vercel
   3. Check Vercel build logs for errors
 
 **Problem:** Environment variables not working
+
 - **Solution:**
   1. Vite requires `VITE_` prefix for environment variables
   2. After adding env vars in Vercel, trigger a new deployment
@@ -190,11 +197,13 @@ You should see a JSON response with service status.
 ### General Issues
 
 **Problem:** API keys not working
+
 - **Solution:**
   - OpenWeatherMap: New keys may take 10-15 minutes to activate
   - Gemini: Check quota limits and ensure key is valid
 
 **Problem:** Voice input not working
+
 - **Solution:**
   - Voice API requires HTTPS in production
   - Use Chrome or Edge browser
@@ -245,9 +254,9 @@ After deployment, you'll have:
 ## Support
 
 If you encounter issues:
+
 1. Check Railway logs: Service → **Deployments** → Click on deployment → **View Logs**
 2. Check Vercel logs: Project → **Deployments** → Click on deployment → **View Function Logs**
 3. Verify all environment variables are set correctly
 4. Test backend health endpoint independently
 5. Check browser console for frontend errors
-
