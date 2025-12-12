@@ -1,0 +1,185 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: 'Inter', 'Noto Sans JP', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', system-ui, sans-serif;
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  body {
+    @apply bg-[#f5f3f0] min-h-screen;
+    overflow-x: hidden;
+  }
+
+  /* Enhanced Dark Mode */
+  .dark body {
+    @apply bg-[#0a0a0f];
+  }
+}
+
+@layer components {
+  .chat-bubble {
+    @apply rounded-2xl px-5 py-4 max-w-md shadow-lg transition-all duration-300;
+  }
+  
+  .chat-bubble-user {
+    @apply bg-gradient-to-br from-amber-500 via-orange-500 to-red-500 text-white ml-auto shadow-amber-500/30 backdrop-blur-sm;
+  }
+  
+  .chat-bubble-bot {
+    @apply bg-[#ffffff] text-gray-800 border-2 border-[#e5e3e0] backdrop-blur-sm shadow-lg;
+  }
+
+  .dark .chat-bubble-bot {
+    @apply bg-[#1a1a24] text-gray-100 border-2 border-[#2a2a35] shadow-xl;
+  }
+  
+  .weather-card {
+    @apply bg-gradient-to-br from-teal-500 via-emerald-500 to-cyan-500 text-white rounded-2xl p-8 shadow-2xl transition-all duration-300;
+  }
+
+  .dark .weather-card {
+    @apply from-teal-600 via-emerald-600 to-cyan-600 shadow-teal-900/50;
+  }
+  
+  .suggestion-card {
+    @apply bg-[#ffffff] rounded-2xl p-5 shadow-lg border-2 border-[#e5e3e0] hover:shadow-2xl transition-all duration-300 backdrop-blur-sm;
+  }
+
+  .dark .suggestion-card {
+    @apply bg-[#1a1a24] border-2 border-[#2a2a35] text-gray-100 shadow-xl;
+  }
+
+  /* Inline status chips */
+  .status-chip {
+    @apply inline-flex items-center space-x-2 px-3 py-2 rounded-full text-xs font-semibold transition-colors;
+  }
+
+  .status-chip.info {
+    @apply bg-teal-50 text-teal-700 dark:bg-teal-900/40 dark:text-teal-200 border border-teal-200 dark:border-teal-700/50;
+  }
+
+  .status-chip.warn {
+    @apply bg-amber-50 text-amber-700 dark:bg-amber-900/40 dark:text-amber-200 border border-amber-200 dark:border-amber-700/50;
+  }
+
+  .status-chip.danger {
+    @apply bg-red-50 text-red-700 dark:bg-red-900/40 dark:text-red-200 border border-red-200 dark:border-red-700/50;
+  }
+
+  /* Card surface helper */
+
+  /* New component styles */
+  .loading-spinner {
+    @apply flex items-center justify-center p-4 rounded-lg;
+  }
+
+  .error-message {
+    @apply bg-red-50 border border-red-200 rounded-lg p-4 text-red-800;
+  }
+
+  .settings-toggle {
+    @apply relative inline-flex h-6 w-11 items-center rounded-full transition-colors;
+  }
+
+  .settings-toggle-thumb {
+    @apply inline-block h-4 w-4 transform rounded-full bg-white transition;
+  }
+
+  /* Animation utilities */
+  .animate-fade-in {
+    animation: fadeIn 0.3s ease-in-out;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.4s ease-out;
+  }
+
+  .animate-pulse-slow {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Enhanced Custom Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
+  margin: 4px 0;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(59, 130, 246, 0.6), rgba(147, 51, 234, 0.6));
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, rgba(59, 130, 246, 0.8), rgba(147, 51, 234, 0.8));
+}
+
+/* Firefox */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(59, 130, 246, 0.6) rgba(0, 0, 0, 0.05);
+}
+
+/* Glassmorphism utility class */
+.glass {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.dark .glass {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Gradient text utility */
+.gradient-text {
+  @apply bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text text-transparent;
+}
+
+/* Animated gradient background */
+@keyframes gradientShift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradientShift 10s ease infinite;
+}

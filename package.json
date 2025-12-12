@@ -1,0 +1,39 @@
+{
+  "name": "atf-weather-assistant",
+  "version": "1.0.0",
+  "description": "AI-powered weather chatbot with Japanese voice input - Technical Assessment Project",
+  "main": "index.js",
+  "scripts": {
+    "install:all": "npm install && cd frontend && npm install && cd ../backend && npm install",
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:backend": "cd backend && npm run dev",
+    "build": "cd backend && npm ci && npm run build",
+    "start": "cd backend && npm start"
+  },
+  "keywords": [
+    "weather",
+    "chatbot",
+    "ai",
+    "voice-recognition",
+    "japanese",
+    "react",
+    "typescript",
+    "nodejs",
+    "technical-assessment"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "typescript": "^5.2.2"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/atf-weather-assistant.git"
+  }
+}

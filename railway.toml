@@ -1,0 +1,21 @@
+# Railway will auto-detect services from folder structure
+# This file ensures proper configuration for each service
+
+[build]
+builder = "NIXPACKS"
+
+# Backend service configuration
+[[services]]
+name = "backend"
+source = "backend"
+
+[services.variables]
+NODE_ENV = "production"
+
+# Frontend service configuration  
+[[services]]
+name = "frontend"
+source = "frontend"
+
+[services.variables]
+NODE_ENV = "production"
