@@ -4,11 +4,11 @@ FROM node:18-alpine
 # Set working directory
 WORKDIR /app
 
-# Copy package.json only first
-COPY package.json ./
+# Copy package files
+COPY package.json package-lock.json* ./
 
-# Install dependencies without package-lock.json
-RUN npm install --no-package-lock
+# Install dependencies
+RUN npm ci --only=production=false
 
 # Copy source code
 COPY . .
