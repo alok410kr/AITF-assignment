@@ -127,11 +127,10 @@ const ActivitySuggestions: React.FC<ActivitySuggestionsProps> = ({
         </motion.div>
       )}
 
-      {/* Enhanced Suggestions Grid - 3 top, 2 bottom */}
+    
       <div className="space-y-6">
-        {/* First Row - 3 Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          {sortedSuggestions.slice(0, 3).map((suggestion, index) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {sortedSuggestions.map((suggestion, index) => (
             <motion.div
               key={index}
               initial={{ opacity: 0, y: 30, scale: 0.95 }}
@@ -196,68 +195,6 @@ const ActivitySuggestions: React.FC<ActivitySuggestionsProps> = ({
             </motion.div>
           ))}
         </div>
-
-        {/* Second Row - 2 Cards (if more than 3 suggestions) */}
-        {sortedSuggestions.length > 3 && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 max-w-5xl mx-auto">
-            {sortedSuggestions.slice(3, 5).map((suggestion, index) => (
-              <motion.div
-                key={index + 3}
-                initial={{ opacity: 0, y: 30, scale: 0.95 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{ duration: 0.5, delay: 0.3 + (index + 3) * 0.1, type: "spring", stiffness: 100 }}
-                whileHover={{ scale: 1.03, y: -5 }}
-                className="group relative"
-              >
-                {/* Glow Effect on Hover */}
-                <div className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${getCategoryGradient(suggestion.category)} opacity-0 group-hover:opacity-20 blur-xl transition-opacity duration-300`} />
-
-                {/* Card Content */}
-                <div className={`relative suggestion-card ${getCategoryColor(suggestion.category)} p-5 h-full border-2 backdrop-blur-sm transition-all duration-300 hover:shadow-xl`}>
-                  {/* Header */}
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="flex items-center space-x-3 flex-1 min-w-0">
-                      <motion.div
-                        whileHover={{ scale: 1.2, rotate: 5 }}
-                        transition={{ type: "spring", stiffness: 300 }}
-                        className="text-3xl flex-shrink-0"
-                      >
-                        {suggestion.icon}
-                      </motion.div>
-                      <div className="min-w-0 flex-1">
-                        <h3 className="font-bold text-lg dark:text-gray-100 group-hover:text-gray-900 dark:group-hover:text-white transition-colors">
-                          {suggestion.title}
-                        </h3>
-                        <p className="text-sm capitalize font-medium dark:text-gray-400 opacity-80">
-                          {suggestion.category}
-                        </p>
-                      </div>
-                    </div>
-                    <motion.div
-                      whileHover={{ scale: 1.1 }}
-                      transition={{ type: "spring", stiffness: 300 }}
-                    >
-                      {getPriorityBadge(suggestion.priority)}
-                    </motion.div>
-                  </div>
-
-                  {/* Description */}
-                  <p className="text-sm mb-4 leading-relaxed dark:text-gray-200 font-medium">
-                    {suggestion.description}
-                  </p>
-
-                  {/* Enhanced Reasoning */}
-                  <div className="bg-white/70 dark:bg-gray-700/70 rounded-xl p-4 border border-gray-200 dark:border-gray-600 backdrop-blur-sm">
-                    <p className="text-sm dark:text-gray-300 leading-relaxed">
-                      <span className="font-bold text-gray-700 dark:text-gray-200">{t.whyThisSuggestion} </span>
-                      {suggestion.reasoning}
-                    </p>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        )}
 
         {/* Additional Tips */}
         {additionalTips.length > 0 && (

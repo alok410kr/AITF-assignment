@@ -7,13 +7,10 @@ class SkySenseAIService {
   private genAI: GoogleGenerativeAI | null = null;
   private models: any[] = [];
   private modelNames: string[] = [
-    'gemini-2.0-flash-exp',
-    'gemini-2.5-flash',
-    'gemini-1.5-flash-001',
-    'gemini-1.5-flash',
-    'gemini-1.5-pro-002',
-    'gemini-1.5-pro-001',
-    'gemini-1.5-pro'
+    // Stable, generally available models
+    'models/gemini-1.5-flash-latest',
+    'models/gemini-1.5-pro-latest',
+    'models/gemini-pro'
   ];
 
   constructor() {

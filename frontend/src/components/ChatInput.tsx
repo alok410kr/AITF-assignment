@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { Send, Mic, MicOff } from 'lucide-react';
+import { Send, Mic, MicOff, XCircle } from 'lucide-react';
 import { useSpeechRecognition } from '../hooks/useSpeechRecognition';
 import { useTranslation } from '../contexts/TranslationContext';
 import { useTheme } from '../contexts/ThemeContext';
@@ -36,8 +36,15 @@ const ChatInput: React.FC<ChatInputProps> = ({
         interimResults: true,
         onResult: (result) => {
             if (result.isFinal && result.transcript.trim()) {
-                handleSendMessage(result.transcript.trim());
+                // Put the recognized text into the input field; user can review and tap send
+                setTextInput((prev) => {
+                    const next = `${prev ? `${prev} ` : ''}${result.transcript.trim()}`;
+                    return next.trim();
+                });
                 resetTranscript();
+                stopListening();
+                // Focus the text input so the user can edit or tap send
+                textInputRef.current?.focus();
             }
         },
         onError: (error) => {
@@ -115,13 +122,14 @@ const ChatInput: React.FC<ChatInputProps> = ({
     const handleVoiceToggle = () => {
         if (isListening) {
             stopListening();
+            resetTranscript();
         } else {
             startListening();
         }
     };
 
     return (
-        <div className="p-6">
+        <div className="p-4 sm:p-6">
             {/* Input Form */}
             <motion.form
                 initial={{ opacity: 0, y: 20 }}
@@ -190,21 +198,35 @@ const ChatInput: React.FC<ChatInputProps> = ({
                     transition={{ type: "spring", stiffness: 200 }}
                     className="mt-4"
                 >
-                    <div className={`flex items-center justify-center space-x-3 rounded-xl p-4 ${
+                    <div className={`flex items-center justify-between space-x-3 rounded-xl p-4 ${
                         theme === 'dark'
                             ? 'bg-red-900/30 border border-red-700/50'
                             : 'bg-red-50 border border-red-200'
                     }`}>
-                        <motion.div
-                            animate={{ scale: [1, 1.2, 1] }}
-                            transition={{ duration: 1, repeat: Infinity }}
-                            className="w-3 h-3 bg-red-500 rounded-full shadow-lg shadow-red-500/50"
-                        />
-                        <span className={`text-base font-bold ${
-                            theme === 'dark' ? 'text-red-300' : 'text-red-700'
-                        }`}>
-                            {t.listening}
-                        </span>
+                        <div className="flex items-center space-x-3">
+                            <motion.div
+                                animate={{ scale: [1, 1.2, 1] }}
+                                transition={{ duration: 1, repeat: Infinity }}
+                                className="w-3 h-3 bg-red-500 rounded-full shadow-lg shadow-red-500/50"
+                            />
+                            <span className={`text-base font-bold ${
+                                theme === 'dark' ? 'text-red-300' : 'text-red-700'
+                            }`}>
+                                {t.listening}
+                            </span>
+                        </div>
+                        <button
+                            type="button"
+                            onClick={() => {
+                                stopListening();
+                                resetTranscript();
+                            }}
+                            className="inline-flex items-center px-3 py-1 text-sm font-semibold rounded-lg bg-white/70 text-red-700 hover:bg-white focus:outline-none focus:ring-2 focus:ring-red-400 dark:bg-red-800/40 dark:text-red-100 dark:hover:bg-red-800/60"
+                            title="Cancel voice"
+                        >
+                            <XCircle size={16} className="mr-1" />
+                            Cancel
+                        </button>
                     </div>
                 </motion.div>
             )}

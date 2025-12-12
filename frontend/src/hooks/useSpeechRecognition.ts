@@ -37,6 +37,7 @@ export const useSpeechRecognition = ({
   onEnd
 }: UseSpeechRecognitionProps = {}): UseSpeechRecognitionReturn => {
   const [isListening, setIsListening] = useState(false);
+  const [isStarting, setIsStarting] = useState(false);
   const [transcript, setTranscript] = useState('');
   const [confidence, setConfidence] = useState(0);
   const [error, setError] = useState<string | null>(null);
@@ -64,6 +65,7 @@ export const useSpeechRecognition = ({
 
     // Event handlers
     recognitionInstance.onstart = () => {
+      setIsStarting(false);
       setIsListening(true);
       setError(null);
       onStart?.();
@@ -143,10 +145,14 @@ export const useSpeechRecognition = ({
       }
 
       setIsListening(false);
+      setIsStarting(false);
     };
 
     recognitionInstance.onend = () => {
       setIsListening(false);
+      setIsStarting(false);
+      setTranscript('');
+      setConfidence(0);
       onEnd?.();
     };
 
@@ -162,7 +168,8 @@ export const useSpeechRecognition = ({
   }, [language, continuous, interimResults, isSupported]);
 
   const startListening = useCallback(async () => {
-    if (!recognition || isListening) return;
+    if (!recognition || isListening || isStarting) return;
+    setIsStarting(true);
 
     try {
       setError(null);
@@ -182,12 +189,18 @@ export const useSpeechRecognition = ({
         }
       }
 
-      // Check if recognition is already running
-      if ((recognition as any).state === 'listening') {
-        console.log('Recognition already listening, stopping first');
+      // Hard-stop any previous session to avoid "already started" errors
+      try {
         recognition.stop();
-        await new Promise(resolve => setTimeout(resolve, 100));
+        if ((recognition as any).abort) {
+          (recognition as any).abort();
+        }
+      } catch (stopErr) {
+        console.log('Recognition stop/abort before start failed, continuing', stopErr);
       }
+
+      // Small delay to let the underlying engine reset
+      await new Promise(resolve => setTimeout(resolve, 220));
 
       recognition.start();
     } catch (err) {
@@ -195,18 +208,28 @@ export const useSpeechRecognition = ({
       setError(errorMessage);
       console.error('Speech recognition start error:', err);
       onError?.(errorMessage);
+      setIsStarting(false);
     }
-  }, [recognition, isListening, onError]);
+  }, [recognition, isListening, isStarting, onError]);
 
   const stopListening = useCallback(() => {
-    if (!recognition || !isListening) return;
+    if (!recognition) return;
 
     try {
+      // Stop and abort to ensure the engine fully resets between runs
       recognition.stop();
+      if ((recognition as any).abort) {
+        (recognition as any).abort();
+      }
     } catch (err) {
       console.error('Speech recognition stop error:', err);
+    } finally {
+      setIsListening(false);
+      setIsStarting(false);
+      setTranscript('');
+      setConfidence(0);
     }
-  }, [recognition, isListening]);
+  }, [recognition]);
 
   const resetTranscript = useCallback(() => {
     setTranscript('');

@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { AlertCircle } from 'lucide-react'
+import { AlertCircle, Trash2 } from 'lucide-react'
 import ChatInput from './ChatInput'
 import WeatherCard from './WeatherCard'
 import ActivitySuggestions from './ActivitySuggestions'
@@ -195,11 +195,9 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ settings }) => {
       : 'bg-[#f5f3f0]'
       }`}>
 
-      {/* Main Chat Container - Grid Layout */}
-      <div className="flex-1 grid grid-cols-1 lg:grid-cols-3 gap-6 max-w-7xl mx-auto w-full">
-        
-        {/* Left Column - Chat Messages */}
-        <div className={`lg:col-span-2 flex flex-col rounded-2xl shadow-2xl overflow-hidden transition-colors duration-300 ${theme === 'dark'
+      {/* Chat Container */}
+      <div className="flex-1 max-w-7xl mx-auto w-full">
+        <div className={`flex flex-col rounded-2xl shadow-2xl overflow-hidden transition-colors duration-300 ${theme === 'dark'
           ? 'bg-[#1a1a24] border-2 border-[#2a2a35]'
           : 'bg-white border-2 border-[#e5e3e0]'
           }`}>
@@ -209,14 +207,31 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ settings }) => {
             ? 'border-[#2a2a35] bg-[#1a1a24]'
             : 'border-[#e5e3e0] bg-white'
             }`}>
-            <div className="flex items-center space-x-3">
-              <div className={`w-10 h-10 bg-gradient-to-br from-amber-500 to-orange-600 rounded-xl flex items-center justify-center shadow-lg`}>
-                <span className="text-xl">💬</span>
+            <div className="flex items-center justify-between space-x-3">
+              <div className="flex items-center space-x-3">
+                <div className={`w-10 h-10 bg-gradient-to-br from-amber-500 to-orange-600 rounded-xl flex items-center justify-center shadow-lg`}>
+                  <span className="text-xl">💬</span>
+                </div>
+                <h1 className={`text-xl font-bold transition-colors duration-300 ${theme === 'dark' ? 'text-white' : 'text-gray-900'
+                  }`}>
+                  {t.chatTitle}
+                </h1>
               </div>
-              <h1 className={`text-xl font-bold transition-colors duration-300 ${theme === 'dark' ? 'text-white' : 'text-gray-900'
-                }`}>
-                {t.chatTitle}
-              </h1>
+              <button
+                type="button"
+                onClick={() => {
+                  setMessages([]);
+                  setCurrentWeather(null);
+                  setCurrentSuggestions(null);
+                  setError(null);
+                }}
+                disabled={messages.length === 0 && !currentWeather && !currentSuggestions}
+                className="inline-flex items-center px-3 py-2 rounded-lg text-sm font-semibold bg-gray-100 hover:bg-gray-200 text-gray-800 border border-gray-200 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed dark:bg-[#2a2a35] dark:text-gray-200 dark:hover:bg-[#3a3a45] dark:border-[#2a2a35]"
+                title="Clear conversation"
+              >
+                <Trash2 size={16} className="mr-1" />
+                Clear chat
+              </button>
             </div>
           </div>
 
@@ -391,45 +406,45 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ settings }) => {
             )}
           </div>
         </div>
+      </div>
 
-        {/* Right Column - Weather & Suggestions */}
-        <div className="lg:col-span-1 space-y-6">
-          {/* Weather Card */}
-          {currentWeather && (
-            <motion.div
-              initial={{ opacity: 0, x: 50, scale: 0.9 }}
-              animate={{ opacity: 1, x: 0, scale: 1 }}
-              transition={{ duration: 0.7, delay: 0.2 }}
-            >
-              <WeatherCard weatherData={currentWeather} />
-            </motion.div>
-          )}
+      {/* Weather and AI Suggestions Below Chat */}
+      <div className="max-w-7xl mx-auto w-full mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Weather Card */}
+        {currentWeather && (
+          <motion.div
+            initial={{ opacity: 0, y: 30, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+          >
+            <WeatherCard weatherData={currentWeather} />
+          </motion.div>
+        )}
 
-          {/* AI Suggestions */}
-          {currentSuggestions && currentSuggestions.suggestions.length > 0 && (
-            <motion.div
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.4 }}
-              className={`rounded-2xl shadow-2xl p-6 transition-colors duration-300 ${theme === 'dark'
-                ? 'bg-[#1a1a24] border-2 border-[#2a2a35]'
-                : 'bg-white border-2 border-[#e5e3e0]'
-                }`}
-            >
-              <h3 className={`text-2xl font-bold mb-6 transition-colors duration-300 ${theme === 'dark' ? 'text-white' : 'text-gray-900'
-                }`}>
-                🤖 AI Suggestions
-              </h3>
-              <div className="max-h-96 overflow-y-auto custom-scrollbar">
-                <ActivitySuggestions
-                  suggestions={currentSuggestions.suggestions}
-                  explanation={currentSuggestions.explanation}
-                  additionalTips={currentSuggestions.additionalTips}
-                />
-              </div>
-            </motion.div>
-          )}
-        </div>
+        {/* AI Suggestions */}
+        {currentSuggestions && currentSuggestions.suggestions.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 30, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className={`rounded-2xl shadow-2xl p-6 transition-colors duration-300 ${theme === 'dark'
+              ? 'bg-[#1a1a24] border-2 border-[#2a2a35]'
+              : 'bg-white border-2 border-[#e5e3e0]'
+              }`}
+          >
+            <h3 className={`text-2xl font-bold mb-6 transition-colors duration-300 ${theme === 'dark' ? 'text-white' : 'text-gray-900'
+              }`}>
+              🤖 AI Suggestions
+            </h3>
+            <div className="max-h-[28rem] overflow-y-auto custom-scrollbar">
+              <ActivitySuggestions
+                suggestions={currentSuggestions.suggestions}
+                explanation={currentSuggestions.explanation}
+                additionalTips={currentSuggestions.additionalTips}
+              />
+            </div>
+          </motion.div>
+        )}
       </div>
 
       {/* Error Display */}
